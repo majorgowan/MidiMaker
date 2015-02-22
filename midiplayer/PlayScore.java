@@ -1,3 +1,9 @@
+package midiplayer;
+
+// JMusic packages
+import jm.JMC;
+import jm.music.data.*;
+import jm.util.*;
 
 // play score in independent thread (big improvement!)
 class PlayScore implements Runnable {

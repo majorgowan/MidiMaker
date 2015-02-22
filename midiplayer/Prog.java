@@ -1,5 +1,10 @@
 package midiplayer;
 
+// JMusic packages
+import jm.JMC;
+import jm.music.data.*;
+import jm.util.*;
+
 // class for a chord progression
 final class Prog implements JMC {
 

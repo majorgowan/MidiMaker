@@ -1,5 +1,16 @@
 package midiplayer;
 
+// Swing packages
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.*;
+
+// For resizable arrays
+import java.util.ArrayList;
+
+// For reading and writing files
+import java.io.*;
 import javax.imageio.*;
 
 // class for drawing a chord progression and listening for

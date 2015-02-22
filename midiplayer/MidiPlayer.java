@@ -363,7 +363,7 @@ public class MidiPlayer implements ActionListener {
                    + "\n"); */
             }
 
-            System.out.println(br.readLine());
+            // System.out.println(br.readLine());
 
         } catch (IOException e) {
             System.out.println("Error reading header of file " + filename + ".MMM");
