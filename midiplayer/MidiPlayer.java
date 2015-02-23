@@ -455,6 +455,13 @@ public class MidiPlayer implements ActionListener {
                     jfrm.repaint();
                 }   
             }
+        } else if (comStr.equals("Edit chords")) {
+
+            ChordsBuilder chordsBuilder = new ChordsBuilder(chords);
+            int result = JOptionPane.showConfirmDialog(null, chordsBuilder, 
+                    "Please please:", JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.PLAIN_MESSAGE);
+            
         } else if (comStr.equals("Play") || comStr.equals("Play interval")) {
 
             if (comStr.equals("Play")) {

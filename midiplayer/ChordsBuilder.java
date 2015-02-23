@@ -3,39 +3,60 @@ package midiplayer;
 // Swing packages
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 // For resizable arrays
 import java.util.ArrayList;
 
+class ChordsBuilder extends JPanel implements ActionListener {
 
-class ChordsBuilder extends JDialog implements actionListener {
+    private JButton addChordButton = new JButton("Add chord");
+    private JButton applyButton = new JButton("Apply");
+    private ArrayList<Chord> localChords;
+    private ArrayList<JButton> removeButtons;
+    private ArrayList<ChordLine> chordLines;
 
     public void actionPerformed(ActionEvent ae) {
-
+        // listen for remove buttons, addbutton and applybutton
+        // do the necessary
     }
 
     public static void resetChordsBuilderPanel() {
 
     }
 
-    public static int buildChords(ArrayList<Chord> chords) {
+    // constructor
+    ChordsBuilder(ArrayList<Chord> chords) {
 
-        // build a JPanel with all the chords and buttons
+        removeButtons = new ArrayList<JButton>(0);
+        chordLines = new ArrayList<ChordLine>(0);
+
+        // make copy of the chords object in case user
+        // chickens out
+        localChords = new ArrayList<Chord>(chords);
 
         JPanel mainPanel = new JPanel();
-        for int i
+        JPanel buttonPanel = new JPanel();
 
-        // chord consists of a name, symbol and JCheckBoxes for notes
-        // relative to the tonic (rather than totally free entry)
-
-
-        // add JPanel to a JScrollPane (in case lots and lots of chords)
+        mainPanel.setLayout(new BoxLayout(mainPanel,BoxLayout.PAGE_AXIS));
         
+        for (int i=0; i < localChords.size(); i++) {
+            System.out.println(localChords.get(i).getName());
+            removeButtons.add(new JButton("remove"));
+            chordLines.add(new ChordLine(localChords.get(i),
+                        removeButtons.get(i),i+1));
+            removeButtons.get(i).setActionCommand("rem"+i);
+            mainPanel.add(chordLines.get(i));
+        }
 
-        // add JScrollPane to a JOptionPane
-        
+        JScrollPane scrollPane = new JScrollPane(mainPanel);
 
-        // return "OK=0" or "CANCEL=-1"
+        buttonPanel.add(addChordButton);
+        buttonPanel.add(applyButton);
+        buttonPanel.setPreferredSize(new Dimension(120,100));
+
+        this.add(buttonPanel);
+        this.add(scrollPane);
 
     }
 }
