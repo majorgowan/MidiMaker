@@ -26,7 +26,7 @@ public class MidiPlayer implements ActionListener {
 
     // some components
     private JFrame jfrm;
-    private JPanel mainPanel, staffPanel;
+    private JPanel mainPanel, staffPanel, chordsPanel;
     private JScrollPane scrollPane;
     private ArrayList<JPanel> staffLine;
     private ArrayList<JCheckBox> checkBox;
@@ -94,6 +94,38 @@ public class MidiPlayer implements ActionListener {
                     new Dimension(60+16*beatsPer*measures,145));
 
         scrollPane.setViewportView(staffPanel);
+    }
+
+    private void refreshChordsPanel() {
+
+        Font smallFont = new Font("SansSerif",Font.BOLD,10);
+
+        chordsPanel.removeAll();
+        chordsPanel.setLayout(new BoxLayout(chordsPanel,BoxLayout.PAGE_AXIS));
+
+        for (int j = 0; j < chords.size(); j++) {
+
+            JLabel nameLabel = new JLabel(chords.get(j).getName()
+                    + " (" + chords.get(j).getSymbol() + ")");
+            nameLabel.setFont(smallFont);
+            chordsPanel.add(nameLabel);
+
+            int[] notes = chords.get(j).getNotes();
+            int realLength = 0;
+            for (int i = 0; i < notes.length; i++) {
+                realLength = i;
+                if (notes[i] == 100) {
+                    break;
+                }
+            }
+            int[] realNotes = Arrays.copyOfRange(notes,0,realLength-1);
+
+            JLabel notesLabel = new JLabel("     " + Arrays.toString(realNotes));
+            notesLabel.setFont(smallFont);
+            chordsPanel.add(notesLabel);
+
+            chordsPanel.add(Box.createRigidArea(new Dimension(0,10)));
+        }
     }
 
     // save piece as MMM file
@@ -461,6 +493,9 @@ public class MidiPlayer implements ActionListener {
             int result = JOptionPane.showConfirmDialog(null, chordsBuilder, 
                     "Please please:", JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.PLAIN_MESSAGE);
+
+            refreshChordsPanel();
+            SwingUtilities.windowForComponent(chordsPanel).pack();
             
         } else if (comStr.equals("Play") || comStr.equals("Play interval")) {
 
@@ -613,6 +648,9 @@ public class MidiPlayer implements ActionListener {
         // sideways scrolling JScrollPane for longer pieces
         scrollPane = new JScrollPane(staffPanel);
 
+        // panel to show installed chords
+        chordsPanel = new JPanel();
+
         // if command line argument try to open file
         if (args.length > 0) {
             try {
@@ -699,6 +737,10 @@ public class MidiPlayer implements ActionListener {
         chordVoiceRemButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         buttonPanel.add(chordVoiceAddButton);
         buttonPanel.add(chordVoiceRemButton);
+
+        buttonPanel.add(Box.createRigidArea(new Dimension(0,20)));
+        refreshChordsPanel();
+        buttonPanel.add(chordsPanel);
 
         // add an empty border to buttonPanel and scrollPane (spacing)
         buttonPanel.setBorder(
