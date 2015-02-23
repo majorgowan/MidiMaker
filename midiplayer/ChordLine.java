@@ -17,14 +17,46 @@ class ChordLine extends JPanel implements ItemListener {
         // of checkboxes.  If six are selected, disable
         // the unselected boxes.  If fewer than six are
         // selected, enable all boxes.
+        
+        int count = 0;
+        for (int i = 0; i < checkbox.length; i++)
+            if (checkbox[i].isSelected())
+                count++;
+
+        if (count >= 6) {
+            for (int i = 0; i < checkbox.length; i++) {
+                if (!(checkbox[i].isSelected()))
+                    checkbox[i].setEnabled(false);
+            }
+        } else {
+            for (int i = 0; i < checkbox.length; i++)
+                checkbox[i].setEnabled(true);
+        }
+        
+    }
+
+    public void setChord() {
+
+        int j = 0;
+        int[] notes = new int[6];
+        for (int i = 0; i < checkbox.length; i++)
+            if (checkbox[i].isSelected())
+                notes[j++] = i;
+        for (int i = j; i < notes.length; i++)
+            notes[i] = 100;
+
+        chord.reInit(nameField.getText(), symbolField.getText(), notes);
+
     }
 
     ChordLine() {
         this.setLayout(new FlowLayout());
     }
 
-    ChordLine(Chord chord, JButton remButton, int number) {
+    ChordLine(Chord c, JButton remButton, int number) {
         this();
+
+        chord = c;
 
         numberLabel = new JLabel(""+number,2);
         nameField = new JTextField(chord.getName(),10);

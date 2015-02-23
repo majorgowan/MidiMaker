@@ -7,6 +7,13 @@ class Chord {
     private String symbol;
     private int[] notes = new int[6];
 
+    Chord() {
+        name = "New chord";
+        symbol = "Ch";
+        for (int i = 0; i<notes.length; i++)
+            notes[i] = 100;
+    }
+
     Chord(String nm, String sym, int[] no) {
         name = nm;
         symbol = sym;
