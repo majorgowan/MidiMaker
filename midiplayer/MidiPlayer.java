@@ -41,7 +41,7 @@ public class MidiPlayer implements ActionListener {
     private Score allTogether = new Score();
     private int beatsPer, measures, tempo;
 
-    // play interval
+    // play section
     private int playStart, playEnd;
 
     // clear all ArrayLists (before making new piece or loading piece)
@@ -132,7 +132,7 @@ public class MidiPlayer implements ActionListener {
 
             chordsPanel.add(Box.createRigidArea(new Dimension(0,10)));
         }
-            
+
         jfrm.revalidate();
     }
 
@@ -265,8 +265,8 @@ public class MidiPlayer implements ActionListener {
             return -1;
     }
 
-    // set play interval
-    private void setInterval() {
+    // set play section
+    private void setSection() {
         JTextField startField = new JTextField("" + playStart,3);
         JTextField endField = new JTextField("" + playEnd,3);
         JPanel intervalPanel = new JPanel(new GridLayout(2,1));
@@ -301,6 +301,9 @@ public class MidiPlayer implements ActionListener {
 
             readMMM(filename, notesAndTypes, chordsAndTypes, chordQualities);
 
+            System.out.println("Reading " + nvoices + " voices and " 
+                    + nchordVoices + " chord-voices");
+
             for (int j = 0; j < nvoices; j++) {
                 voice.add(new Piece(tempo));
                 staff.add(new Staff());
@@ -317,7 +320,7 @@ public class MidiPlayer implements ActionListener {
                     chordStaff.get(j).setChordAndTypeAndQuality(i,
                             chordsAndTypes[2*j*measures*beatsPer+2*i],
                             chordsAndTypes[2*j*measures*beatsPer+2*i+1],
-                            chordQualities[2*j*measures*beatsPer+i]);
+                            chordQualities[j*measures*beatsPer+i]);
             }
 
             playStart = 1;
@@ -345,7 +348,7 @@ public class MidiPlayer implements ActionListener {
 
         System.out.println("Reading " + nvoices + " voices and " 
                 + nchordVoices + " chord-voices");
-        
+
         for (int j = 0; j < nvoices; j++) {
             voice.add(new Piece(tempo));
             staff.add(new Staff());
@@ -355,15 +358,15 @@ public class MidiPlayer implements ActionListener {
                         notesAndTypes[2*j*measures*beatsPer+2*i+1]);
         }
         for (int j = 0; j < nchordVoices; j++) {
-            System.out.println("Chord voice number " + j);
             chordVoice.add(new Prog(tempo));
             chordStaff.add(new ChordStaff(chords));
             chordStaff.get(j).setParams(beatsPer,measures,chordVoice.get(j));
-            for (int i = 0; i < measures*beatsPer; i++) 
+            for (int i = 0; i < measures*beatsPer; i++) {
                 chordStaff.get(j).setChordAndTypeAndQuality(i,
                         chordsAndTypes[2*j*measures*beatsPer+2*i],
                         chordsAndTypes[2*j*measures*beatsPer+2*i+1],
-                        chordQualities[2*j*measures*beatsPer+i]);
+                        chordQualities[j*measures*beatsPer+i]);
+            }
         }
 
         playStart = 1;
@@ -393,8 +396,6 @@ public class MidiPlayer implements ActionListener {
             words = br.readLine().split(" ");
             int nchords = Integer.parseInt(words[1]);
 
-            // System.out.println("Reading " + nchords + " chords.");
-
             // read chord patterns
             for (int i = 0; i < nchords; i++) {
                 words = br.readLine().split(" ");
@@ -405,14 +406,13 @@ public class MidiPlayer implements ActionListener {
                     notes[j] = Integer.parseInt(words[2+j]);
                 chords.add(new Chord(name, symbol, notes));
                 /*  System.out.println("chord " + i
-                   + "\nname " + name
-                   + "\nsymbol " + symbol
-                   + "\nnotes " + Arrays.toString(notes)
-                   + "\n"); */
+                    + "\nname " + name
+                    + "\nsymbol " + symbol
+                    + "\nnotes " + Arrays.toString(notes)
+                    + "\n"); */
             }
 
             refreshChordsPanel();
-            //System.out.println("Refreshed chords panel!");
 
         } catch (IOException e) {
             System.out.println("Error reading header of file " + filename + ".MMM");
@@ -440,6 +440,7 @@ public class MidiPlayer implements ActionListener {
             }
             for (int j = 0; j < nchordVoices; j++) {
                 String[] words = br.readLine().split(" ");
+                System.out.println("Read " + words.length + " words!");
                 for (int i = 0; i < beatsPer*measures; i++) {
                     chordsAndTypes[2*j*beatsPer*measures+2*i] 
                         = Integer.parseInt(words[3*i]);
@@ -523,7 +524,7 @@ public class MidiPlayer implements ActionListener {
                 playStart = 1; 
                 playEnd = measures;
             } else {
-                setInterval();
+                setSection();
             }
 
             allTogether.empty();
@@ -674,12 +675,12 @@ public class MidiPlayer implements ActionListener {
         outerChordsPanel.setLayout(
                 new BoxLayout(outerChordsPanel,BoxLayout.PAGE_AXIS));
         JScrollPane chordsScrollPane = new JScrollPane(outerChordsPanel);
-        JButton editChordsButton = new JButton("Edit");
+        JButton editChordsButton = new JButton("Edit chords");
         Font smallFont = new Font("SansSerif",Font.BOLD,10);
         editChordsButton.setFont(smallFont);
         editChordsButton.setActionCommand("Edit chords");
         editChordsButton.addActionListener(this);
-        
+
         outerChordsPanel.add(Box.createRigidArea(new Dimension(0,5)));
         outerChordsPanel.add(editChordsButton);
         editChordsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -741,10 +742,10 @@ public class MidiPlayer implements ActionListener {
         playButton.setActionCommand("Play");
         playButton.addActionListener(this);
 
-        JButton playIntervalButton = new JButton("Play interval");
-        playIntervalButton.setActionCommand("Play interval");
-        playIntervalButton.addActionListener(this);
-        playIntervalButton.setPreferredSize(playButton.getPreferredSize());
+        JButton playSectionButton = new JButton("Play section");
+        playSectionButton.setActionCommand("Play section");
+        playSectionButton.addActionListener(this);
+        playSectionButton.setPreferredSize(playButton.getPreferredSize());
 
         // assemble Swing components
         scrollPane.setPreferredSize(new Dimension(690, 510));
@@ -758,9 +759,9 @@ public class MidiPlayer implements ActionListener {
         buttonPanel.add(Box.createRigidArea(new Dimension(0,20)));
 
         playButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        playIntervalButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        playSectionButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         buttonPanel.add(playButton);
-        buttonPanel.add(playIntervalButton);
+        buttonPanel.add(playSectionButton);
         buttonPanel.add(Box.createRigidArea(new Dimension(0,20)));
 
         voiceAddButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -823,11 +824,11 @@ public class MidiPlayer implements ActionListener {
         JMenuItem playFromTopItem = new JMenuItem("Play from the top");
         playFromTopItem.setActionCommand("Play");
         playFromTopItem.addActionListener(this);
-        JMenuItem playIntervalItem = new JMenuItem("Play interval ...");
-        playIntervalItem.setActionCommand("Play interval");
-        playIntervalItem.addActionListener(this);
+        JMenuItem playSectionItem = new JMenuItem("Play section ...");
+        playSectionItem.setActionCommand("Play section");
+        playSectionItem.addActionListener(this);
         playMenu.add(playFromTopItem);
-        playMenu.add(playIntervalItem);
+        playMenu.add(playSectionItem);
 
         // Compose menu
         composeMenu.setMnemonic('C');
