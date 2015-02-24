@@ -10,7 +10,8 @@ class Chord {
     Chord() {
         name = "New chord";
         symbol = "Ch";
-        for (int i = 0; i<notes.length; i++)
+        notes[0] = 0;
+        for (int i = 1; i<notes.length; i++)
             notes[i] = 100;
     }
 

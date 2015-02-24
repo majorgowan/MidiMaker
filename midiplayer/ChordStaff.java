@@ -121,6 +121,10 @@ class ChordStaff extends JPanel {
         repaint();
     }
 
+    public void resetChords(ArrayList<Chord> ch) {
+        chords = ch;
+    }
+
     // convert musical notation to series of notes
     public void build(int playStart, int playEnd) {
         prog.reset();

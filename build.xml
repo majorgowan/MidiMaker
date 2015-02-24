@@ -13,6 +13,10 @@
 
     <target name="compress">
         <jar jarfile="MajMidMak.jar" basedir="." includes="*.class" />
+        <zip destfile="MajMidMak.zip">
+            <zipfileset dir="." prefix="MajMidMak/"
+                includes="MajMidMak.jar,jMusic*.jar,*.MMM,Midi.bat,Midi.unx" />
+        </zip>
     </target>
 
     <target name="clean">
