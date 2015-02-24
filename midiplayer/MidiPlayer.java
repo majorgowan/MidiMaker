@@ -343,6 +343,9 @@ public class MidiPlayer implements ActionListener {
 
         readMMM(filename + ".MMM", notesAndTypes, chordsAndTypes, chordQualities);
 
+        System.out.println("Reading " + nvoices + " voices and " 
+                + nchordVoices + " chord-voices");
+        
         for (int j = 0; j < nvoices; j++) {
             voice.add(new Piece(tempo));
             staff.add(new Staff());
@@ -352,6 +355,7 @@ public class MidiPlayer implements ActionListener {
                         notesAndTypes[2*j*measures*beatsPer+2*i+1]);
         }
         for (int j = 0; j < nchordVoices; j++) {
+            System.out.println("Chord voice number " + j);
             chordVoice.add(new Prog(tempo));
             chordStaff.add(new ChordStaff(chords));
             chordStaff.get(j).setParams(beatsPer,measures,chordVoice.get(j));
@@ -389,6 +393,8 @@ public class MidiPlayer implements ActionListener {
             words = br.readLine().split(" ");
             int nchords = Integer.parseInt(words[1]);
 
+            // System.out.println("Reading " + nchords + " chords.");
+
             // read chord patterns
             for (int i = 0; i < nchords; i++) {
                 words = br.readLine().split(" ");
@@ -398,7 +404,7 @@ public class MidiPlayer implements ActionListener {
                 for (int j = 0; j < words.length-2; j++)
                     notes[j] = Integer.parseInt(words[2+j]);
                 chords.add(new Chord(name, symbol, notes));
-                /* System.out.println("chord " + i
+                /*  System.out.println("chord " + i
                    + "\nname " + name
                    + "\nsymbol " + symbol
                    + "\nnotes " + Arrays.toString(notes)
@@ -406,6 +412,7 @@ public class MidiPlayer implements ActionListener {
             }
 
             refreshChordsPanel();
+            //System.out.println("Refreshed chords panel!");
 
         } catch (IOException e) {
             System.out.println("Error reading header of file " + filename + ".MMM");
