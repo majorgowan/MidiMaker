@@ -269,16 +269,16 @@ public class MidiPlayer implements ActionListener {
     private void setSection() {
         JTextField startField = new JTextField("" + playStart,3);
         JTextField endField = new JTextField("" + playEnd,3);
-        JPanel intervalPanel = new JPanel(new GridLayout(2,1));
+        JPanel sectionPanel = new JPanel(new GridLayout(2,1));
         JPanel line1 = new JPanel();
         JPanel line2 = new JPanel();
         line1.add(new JLabel("From measure: ",JLabel.RIGHT));
         line1.add(startField);
         line2.add(new JLabel("   To measure: ",JLabel.RIGHT));
         line2.add(endField);
-        intervalPanel.add(line1);
-        intervalPanel.add(line2);
-        JOptionPane.showConfirmDialog(null, intervalPanel, 
+        sectionPanel.add(line1);
+        sectionPanel.add(line2);
+        JOptionPane.showConfirmDialog(null, sectionPanel, 
                 "Please please:", JOptionPane.OK_CANCEL_OPTION);
         playStart = Integer.parseInt(startField.getText());
         playEnd = Integer.parseInt(endField.getText());
@@ -518,7 +518,7 @@ public class MidiPlayer implements ActionListener {
             for (int k=0; k < chordVoice.size(); k++)
                 chordStaff.get(k).resetChords(chords);
 
-        } else if (comStr.equals("Play") || comStr.equals("Play interval")) {
+        } else if (comStr.equals("Play") || comStr.equals("Play section")) {
 
             if (comStr.equals("Play")) {
                 playStart = 1; 
