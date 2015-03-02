@@ -18,7 +18,13 @@
         <echo>
             Making a jar.
         </echo>
-        <jar jarfile="MajMidMak.jar" basedir="." includes="midiplayer/*.class" />
+        <jar jarfile="MajMidMak.jar"  
+            basedir="." includes="midiplayer/*.class">
+            <manifest>
+                <attribute name="Main-Class" value="midiplayer.MidiPlayer"/>
+                <attribute name="Class-Path" value="jMusic1.6.4.jar"/>
+            </manifest>
+        </jar>
     </target>
 
     <target name="zip" depends="compile, jar">
