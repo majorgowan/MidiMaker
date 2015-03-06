@@ -685,6 +685,8 @@ public class MidiPlayer implements ActionListener {
         outerChordsPanel.add(editChordsButton);
         editChordsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         outerChordsPanel.add(Box.createRigidArea(new Dimension(0,5)));
+
+        // add chordsPanel to outerChordsPanel
         outerChordsPanel.add(chordsPanel);
         chordsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 

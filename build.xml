@@ -19,7 +19,7 @@
             Making a jar.
         </echo>
         <jar jarfile="MajMidMak.jar"  
-            basedir="." includes="midiplayer/*.class">
+            basedir="." includes="midiplayer/*.class,Images/*.png">
             <manifest>
                 <attribute name="Main-Class" value="midiplayer.MidiPlayer"/>
                 <attribute name="Class-Path" value="jMusic1.6.4.jar"/>
@@ -33,7 +33,7 @@
         </echo>
         <zip destfile="MajMidMak.zip">
             <zipfileset dir="." prefix="MajMidMak/"
-                includes="MajMidMak.jar,jMusic*.jar,*.MMM,treble.png,Midi.bat,Midi.unx" />
+                includes="MajMidMak.jar,jMusic*.jar,*.MMM" />
         </zip>
     </target>
 

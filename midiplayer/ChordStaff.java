@@ -12,6 +12,7 @@ import java.util.ArrayList;
 // For reading and writing files
 import java.io.*;
 import javax.imageio.*;
+import java.net.URL;
 
 // class for drawing a chord progression and listening for
 // mouse activity
@@ -47,7 +48,10 @@ class ChordStaff extends JPanel {
 
         tc_img = null;
         try {
-            tc_img = ImageIO.read(new File("treble.png"));
+            ClassLoader cl = this.getClass().getClassLoader();
+            URL trebleImage = cl.getResource("Images/treble.png");
+
+            tc_img = ImageIO.read(trebleImage);
         } catch (IOException e) {
             System.out.println("Treble clef image not found!");
         }

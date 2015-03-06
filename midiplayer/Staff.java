@@ -9,6 +9,7 @@ import java.awt.image.*;
 // For reading and writing files
 import java.io.*;
 import javax.imageio.*;
+import java.net.URL;
 
 // class for drawing staffs and notes and listening for
 // mouse activity
@@ -40,7 +41,10 @@ class Staff extends JPanel {
 
         tc_img = null;
         try {
-            tc_img = ImageIO.read(new File("treble.png"));
+            ClassLoader cl = this.getClass().getClassLoader();
+            URL trebleImage = cl.getResource("Images/treble.png");
+
+            tc_img = ImageIO.read(trebleImage);
         } catch (IOException e) {
             System.out.println("Treble clef image not found!");
         }
